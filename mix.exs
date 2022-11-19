@@ -11,6 +11,15 @@ defmodule ScraperEx.MixProject do
       docs: docs(),
       package: package(),
       test_coverage: [tool: ExCoveralls],
+
+      dialyzer: [
+        plt_add_apps: [:ex_unit, :mix, :credo, :jason],
+        list_unused_filters: true,
+        plt_local_path: "dialyzer",
+        plt_core_path: "dialyzer",
+        flags: [:unmatched_returns]
+      ],
+
       preferred_cli_env: [
         coveralls: :test,
         "coveralls.detail": :test,
@@ -32,10 +41,12 @@ defmodule ScraperEx.MixProject do
     [
       {:hound, "~> 1.1"},
 
-      {:ex_doc, ">= 0.0.0", only: :dev},
+      {:ex_doc, ">= 0.0.0", optional: true, only: :dev},
 
       {:telemetry, "~> 1.1"},
       {:telemetry_metrics, "~> 0.6.1"},
+
+      {:dialyxir, "~> 1.0", optional: true, only: :test, runtime: false},
 
       {:excoveralls, "~> 0.10", only: :test},
       {:credo, "~> 1.6", only: [:test, :dev], runtime: false},

@@ -1,18 +1,16 @@
 defmodule ScraperEx do
-  @moduledoc """
-  Documentation for `ScraperEx`.
-  """
+  @external_resource "../README.md"
+  @moduledoc "#{File.read!("./README.md")}"
 
-  @doc """
-  Hello world.
+  alias ScraperEx.Window
 
-  ## Examples
-
-      iex> ScraperEx.hello()
-      :world
-
-  """
-  def hello do
-    :world
+  def run_task_in_window(configs, window_opts \\ []) do
+    with {:ok, pid} <- Window.start_link(window_opts) do
+      pid
+        |> Window.run_in_window(fn _ -> ScraperEx.Task.run(configs) end)
+        |> tap(fn _ -> Window.shutdown(pid) end)
+    end
   end
+
+  defdelegate run_task(configs), to: ScraperEx.Task, as: :run
 end
