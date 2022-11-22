@@ -6,6 +6,7 @@ defmodule ScraperEx.MixProject do
       app: :scraper_ex,
       version: "0.1.0",
       elixir: "~> 1.10",
+      description: "Scraping with hound made a bit easier and quicker to use for writing applications",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       docs: docs(),
@@ -65,15 +66,8 @@ defmodule ScraperEx.MixProject do
 
   defp docs do
     [
-      main: "RequestCache",
-      source_url: "https://github.com/mikaak/request_cache_plug",
-
-      groups_for_modules: [
-        "Middleware/Plugs": [
-          RequestCache.Plug,
-          RequestCache.Middleware
-        ]
-      ]
+      main: "ScraperEx",
+      source_url: "https://github.com/mikaak/scraper_ex"
     ]
   end
 end
