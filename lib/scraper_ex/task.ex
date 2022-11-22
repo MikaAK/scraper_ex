@@ -45,11 +45,11 @@ defmodule ScraperEx.Task do
   def run(task_configs) do
     task_configs
       |> Enum.map(&maybe_prepare_config/1)
-      |> Enum.reduce(%{}, fn config, acc ->
+      |> Enum.reduce_while(%{}, fn config, acc ->
         case run_config(config) do
-          :ok -> acc
-          {:ok, {key, value}} -> Map.put(acc, key, value)
-          {:error, e} -> Map.update(acc, :errors, [e], &[e | &1])
+          :ok -> {:cont, acc}
+          {:ok, {key, value}} -> {:cont, Map.put(acc, key, value)}
+          {:error, e} -> {:halt, {:error, put_in(e.details.error, e)}}
         end
       end)
   end
