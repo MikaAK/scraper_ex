@@ -112,7 +112,12 @@ defmodule ScraperEx.Task do
 
   defp run_config(%Config.Input{selector: selector, input: input}) do
     try do
-      Hound.Helpers.Element.fill_field(selector, input)
+      with nil <- Hound.Helpers.Element.fill_field(selector, input) do
+        {:error, ErrorMessage.failed_dependency("hound failed to fill field because it wasn't found", %{
+          selector: selector,
+          input: input
+        })}
+      end
     rescue
       error ->
         {:error, ErrorMessage.failed_dependency("hound failed to fill field", %{
