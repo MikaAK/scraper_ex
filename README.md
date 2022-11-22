@@ -44,7 +44,7 @@ Tasks are defined by configs, you can either use the struct form using `ScraperE
 The following actions are currently implemented:
 - `:navigate_to` or `ScraperEx.Task.Config.Navigate`
 - `:input` or `ScraperEx.Task.Config.Input`
-- `:click` or `ScraperEx.Task.Config.click`
+- `:click` or `ScraperEx.Task.Config.Click`
 - `:read` or `ScraperEx.Task.Config.Read`
 - `:screenshot` or `ScraperEx.Task.Config.Screenshot`
 
