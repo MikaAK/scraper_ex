@@ -16,11 +16,11 @@ defmodule ScraperEx.MixProject do
         plt_add_apps: [:ex_unit, :mix, :credo, :jason],
         list_unused_filters: true,
         plt_local_path: "dialyzer",
-        plt_core_path: "dialyzer",
-        flags: [:unmatched_returns]
+        plt_core_path: "dialyzer"
       ],
 
       preferred_cli_env: [
+        dialyzer: :test,
         coveralls: :test,
         "coveralls.detail": :test,
         "coveralls.post": :test,
@@ -40,12 +40,12 @@ defmodule ScraperEx.MixProject do
   defp deps do
     [
       {:hound, "~> 1.1"},
-
-      {:ex_doc, ">= 0.0.0", optional: true, only: :dev},
-
+      {:floki, "~> 0.34"},
+      {:error_message, "~> 0.2"},
       {:telemetry, "~> 1.1"},
       {:telemetry_metrics, "~> 0.6.1"},
 
+      {:ex_doc, ">= 0.0.0", optional: true, only: :dev},
       {:dialyxir, "~> 1.0", optional: true, only: :test, runtime: false},
 
       {:excoveralls, "~> 0.10", only: :test},

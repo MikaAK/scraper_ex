@@ -46,12 +46,22 @@ The following actions are currently implemented:
 #### Example
 ```elixir
 iex> ScraperEx.run_task_in_window([
-...>   {:navigate_to, "http://mysite.gg"},
-...>   {:read, :username, {:css, ".my_username-selector"}},
-...>   {:read, :rank, {:id, "my-id"}},
-...>   {:navigate_to, "http://mysite.gg"},
-...>   {:click, {:css, ".my-button-forward"}},
-...>   {:read, :item_url, {:css, ".my-item-url"}},
+...>   {:navigate_to, "https://en.wikipedia.org/wiki/Example.com"},
+...>   {:read, :references, {:css, ".reference-text"}},
+...>   {:read, :page_title, {:id, "firstHeading"}},
+...>   {:read, :external_link_4, {:css, "#bodyContent ul:nth-child(21) li:nth-child(4)"}},
+...>   {:click, {:css, "h2:has(#External_links) + ul li:nth-of-type(3) a"}, :timer.seconds(1)},
+...>   {:read, :clicked_url, {:css, "h1"}},
 ...> ])
-%{username: "MyUsername", rank: "Gold", item_url: "https://google.com"}
+%{ \
+  page_title: "Example.com", \
+  external_link_4: "example.edu", \
+  clicked_url: "Example Domain", \
+  references: [ \
+    "\"IANA WHOIS Service\". IANA. Retrieved 2022-10-25.", \
+    "\"IANA-managed Reserved Domains\". IANA. Retrieved 2020-06-20.", \
+    "RFC 2606, Reserved Top Level DNS Names, D. Eastlake, A. Panitz, The Internet Society (June 1999), Section 3.", \
+    "RFC 6761, S. Cheshire, M. Krochmal, Special-Use Domain Names, IETF (February 2013)" \
+  ] \
+}
 ```
