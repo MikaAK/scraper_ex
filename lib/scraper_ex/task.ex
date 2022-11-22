@@ -2,7 +2,6 @@ defmodule ScraperEx.Task do
   @moduledoc false
 
   defmodule Config.Navigate do
-    @moduledoc "Navigates to a page, can specify `load_time`"
     @type t :: %__MODULE__{url: String.t, load_time: pos_integer}
 
     @enforce_keys [:url]
@@ -10,7 +9,6 @@ defmodule ScraperEx.Task do
   end
 
   defmodule Config.Input do
-    @moduledoc "Inputs text into a input"
     @type t :: %__MODULE__{selector: Hound.Element.selector, input: String.t}
 
     @enforce_keys [:selector, :input]
@@ -18,7 +16,6 @@ defmodule ScraperEx.Task do
   end
 
   defmodule Config.Click do
-    @moduledoc "Clicks a element on the page"
     @type t :: %__MODULE__{selector: Hound.Element.selector, delay: pos_integer}
 
     @enforce_keys [:selector]
@@ -26,16 +23,11 @@ defmodule ScraperEx.Task do
   end
 
   defmodule Config.Screenshot do
-    @moduledoc "Takes a screenshot"
     @type t :: %__MODULE__{path: String.t}
     defstruct [:path]
   end
 
   defmodule Config.Read do
-    @moduledoc """
-    Reads a value from the page and stores it under a key, this key will be used to build
-    a map with all the read values
-    """
     @type t :: %__MODULE__{selector: Hound.Element.selector, key: String.t | atom}
 
     @enforce_keys [:selector, :key]
