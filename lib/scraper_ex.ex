@@ -13,15 +13,18 @@ defmodule ScraperEx do
                             {:value, key :: String.t | atom, Hound.Element.selector} |
                             {:click, Hound.Element.selector} |
                             :screenshot |
-                            {:screenshot, path :: String.t}
+                            {:screenshot, path :: String.t} |
+                            {:scroll, x :: pos_integer} |
+                            {:scroll, x :: pos_integer, y :: pos_integer}
 
   @type task_module_config :: ScraperEx.Task.Config.Screenshot.t |
                               ScraperEx.Task.Config.Navigate.t |
                               ScraperEx.Task.Config.Input.t |
                               ScraperEx.Task.Config.Click.t |
+                              ScraperEx.Task.Config.Scroll.t |
                               ScraperEx.Task.Config.Read.t
 
-  @type task_config :: task_atom_config | task_module_config
+  @type task_config :: task_atom_config | task_module_config | {:allow_error, task_atom_config | task_module_config}
 
   alias ScraperEx.Window
 
@@ -64,4 +67,9 @@ defmodule ScraperEx do
       iex> Hound.end_session()
   """
   defdelegate run_task(configs), to: ScraperEx.Task, as: :run
+
+  @spec allow_error(task_config) :: {:allow_error, task_atom_config | task_module_config}
+  def allow_error(config) do
+    {:allow_error, config}
+  end
 end

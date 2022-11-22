@@ -25,6 +25,13 @@ defmodule ScraperEx.Task do
     defstruct [:delay | @enforce_keys]
   end
 
+  defmodule Config.Scroll do
+    @moduledoc "Scrolls an element"
+    @type t :: %__MODULE__{selector: Hound.Element.selector, x_offset: pos_integer, y_offset: pos_integer}
+    @enforce_keys [:selector]
+    defstruct [{:x_offset, 0}, {:y_offset, 0} | @enforce_keys]
+  end
+
   defmodule Config.Screenshot do
     @moduledoc "Takes a screenshot"
     @type t :: %__MODULE__{path: String.t}
@@ -45,13 +52,25 @@ defmodule ScraperEx.Task do
   def run(task_configs) do
     task_configs
       |> Enum.map(&maybe_prepare_config/1)
-      |> Enum.reduce_while(%{}, fn config, acc ->
-        case run_config(config) do
-          :ok -> {:cont, acc}
-          {:ok, {key, value}} -> {:cont, Map.put(acc, key, value)}
-          {:error, e} -> {:halt, {:error, put_in(e.details[:error], e)}}
-        end
+      |> Enum.reduce_while(%{}, fn
+        {:allow_error, config}, acc ->
+          case run_config(config) do
+            :ok -> {:cont, acc}
+            {:ok, {key, value}} -> {:cont, Map.put(acc, key, value)}
+            {:error, e} -> {:cont, Map.update(acc, :errors, [e], &[e | &1])}
+          end
+
+        config, acc ->
+          case run_config(config) do
+            :ok -> {:cont, acc}
+            {:ok, {key, value}} -> {:cont, Map.put(acc, key, value)}
+            {:error, e} -> {:halt, {:error, put_in(e.details[:error], e)}}
+          end
       end)
+  end
+
+  defp maybe_prepare_config({:allow_error, config}) do
+    {:allow_error, maybe_prepare_config(config)}
   end
 
   defp maybe_prepare_config({:navigate_to, url}) do
@@ -82,6 +101,14 @@ defmodule ScraperEx.Task do
     %Config.Screenshot{path: path}
   end
 
+  defp maybe_prepare_config({:scroll, selector, x}) do
+    %Config.Scroll{selector: selector, x_offset: x}
+  end
+
+  defp maybe_prepare_config({:scroll, selector, x, y}) do
+    %Config.Scroll{selector: selector, x_offset: x, y_offset: y}
+  end
+
   defp maybe_prepare_config({:read, key, selector}) do
     %Config.Read{key: key, selector: selector}
   end
@@ -106,6 +133,12 @@ defmodule ScraperEx.Task do
     if load_time do
       Process.sleep(load_time)
     end
+
+    :ok
+  end
+
+  defp run_config(%Config.Scroll{selector: selector, x_offset: x, y_offset: y}) do
+    Hound.Helpers.Element.move_to(selector, x, y)
 
     :ok
   end
