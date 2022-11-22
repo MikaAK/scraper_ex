@@ -15,8 +15,8 @@ defmodule ScraperEx.MixProject do
       dialyzer: [
         plt_add_apps: [:ex_unit, :mix, :credo, :jason],
         list_unused_filters: true,
-        plt_local_path: "dialyzer",
-        plt_core_path: "dialyzer"
+        plt_local_path: ".check",
+        plt_core_path: ".check"
       ],
 
       preferred_cli_env: [
