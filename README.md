@@ -46,6 +46,7 @@ The following actions are currently implemented:
 - `:input` or `ScraperEx.Task.Config.Input`
 - `:click` or `ScraperEx.Task.Config.click`
 - `:read` or `ScraperEx.Task.Config.Read`
+- `:screenshot` or `ScraperEx.Task.Config.Screenshot`
 
 #### Example
 ```elixir
