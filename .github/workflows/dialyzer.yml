@@ -2,35 +2,39 @@ name: Dialyzer
 
 on: push
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   Dialyzer:
     runs-on: ubuntu-latest
 
-    container:
-      image: mikaak/elixir:1.13-alpine
-      env:
-        MIX_ENV: test
+    env:
+      MIX_ENV: test
 
     steps:
       - uses: actions/checkout@v2
 
+      - name: Set up Elixir
+        uses: erlef/setup-beam@v1
+        with:
+          elixir-version: '1.14.1' # Define the elixir version [required]
+          otp-version: '25.1.2' # Define the OTP version [required]
+
+
       - name: Install Rebar & Hex
         run: mix local.hex --force && mix local.rebar --force
 
-      - name: Install Tar
-        run: apk add --no-cache tar
-
-      - name: Cache Deps & Build
-        uses: actions/cache@v2
+      - name: Restore dependencies cache
+        uses: actions/cache@v3
         with:
-          key: ${{ runner.os }}-mix-dialyzer-${{ hashFiles('**/mix.lock') }}
           path: |
-            deps
-            _build
-            dialyzer
-            !._build/dev/lib/error_message/
-          restore-keys: |
-            ${{ runner.os }}-mix-dialyzer-
+                _build
+                deps
+                .check
+          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}-${{ hashFiles('./.tool-versions') }}
+          restore-keys: ${{ runner.os }}-mix-
 
       - name: Install Dependencies
         run: mix deps.get
@@ -39,6 +43,6 @@ jobs:
         run: mix compile
 
       - name: Run Dialyzer
-        run: mix dialyzer
+        run: mkdir -p .check && mix dialyzer
 
 
