@@ -49,7 +49,7 @@ defmodule ScraperEx.Task do
         case run_config(config) do
           :ok -> {:cont, acc}
           {:ok, {key, value}} -> {:cont, Map.put(acc, key, value)}
-          {:error, e} -> {:halt, {:error, put_in(e.details.error, e)}}
+          {:error, e} -> {:halt, {:error, put_in(e.details[:error], e)}}
         end
       end)
   end
