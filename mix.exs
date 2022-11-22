@@ -67,7 +67,18 @@ defmodule ScraperEx.MixProject do
   defp docs do
     [
       main: "ScraperEx",
-      source_url: "https://github.com/mikaak/scraper_ex"
+      source_url: "https://github.com/mikaak/scraper_ex",
+
+      groups_for_modules: [
+        "Window": [ScraperEx.Window],
+        "Task Configs": [
+          ScraperEx.Task.Config.Click,
+          ScraperEx.Task.Config.Input,
+          ScraperEx.Task.Config.Navigate,
+          ScraperEx.Task.Config.Read,
+          ScraperEx.Task.Config.Screenshot
+        ]
+      ]
     ]
   end
 end
