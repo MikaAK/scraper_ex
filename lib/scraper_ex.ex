@@ -12,7 +12,7 @@ defmodule ScraperEx do
                             {:input, Hound.Element.selector} |
                             {:value, key :: String.t | atom, Hound.Element.selector} |
                             {:click, Hound.Element.selector} |
-                            :screenshot,
+                            :screenshot |
                             {:screenshot, path :: String.t}
 
   @type task_module_config :: ScraperEx.Task.Config.Screenshot.t |
