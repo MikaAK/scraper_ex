@@ -47,6 +47,16 @@ The following actions are currently implemented:
 - `:click` or `ScraperEx.Task.Config.Click`
 - `:read` or `ScraperEx.Task.Config.Read`
 - `:screenshot` or `ScraperEx.Task.Config.Screenshot`
+- `:scroll` or `ScraperEx.Task.Config.Scroll`
+- `:sleep` or `ScraperEx.Task.Config.Sleep`
+- `:send_text` or `ScraperEx.Task.Config.SendText`
+- `:send_keys` or `ScraperEx.Task.Config.SendKeys`
+- `:javascript` or `ScraperEx.Task.Config.Javascript`
+
+You can allow errors by wrapping a command in
+```elixir
+  ScraperEx.allow_error({:click, {:css, ".thing"}})
+```
 
 #### Example
 ```elixir

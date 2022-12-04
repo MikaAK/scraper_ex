@@ -15,7 +15,12 @@ defmodule ScraperEx do
                             :screenshot |
                             {:screenshot, path :: String.t} |
                             {:scroll, x :: pos_integer} |
-                            {:scroll, x :: pos_integer, y :: pos_integer}
+                            {:scroll, x :: pos_integer, y :: pos_integer} |
+                            {:sleep, period :: pos_integer} |
+                            {:send_text, text :: String.t} |
+                            {:send_keys, keys :: list(atom) | atom} |
+                            {:javascript, script :: String.t} |
+                            {:javascript, key :: atom | String.t, script :: String.t}
 
   @type task_module_config :: ScraperEx.Task.Config.Screenshot.t |
                               ScraperEx.Task.Config.Navigate.t |
