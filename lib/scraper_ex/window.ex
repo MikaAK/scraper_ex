@@ -54,7 +54,11 @@ defmodule ScraperEx.Window do
 
     opts = Keyword.put(opts, :session_id, session_id)
 
-    {:ok, opts, {:continue, opts[:start_fn]}}
+    if opts[:start_fn] do
+      {:ok, opts, {:continue, opts[:start_fn]}}
+    else
+      {:ok, opts}
+    end
   end
 
   def handle_continue(start_fn, opts) do
@@ -112,7 +116,9 @@ defmodule ScraperEx.Window do
       Logger.info("Hound window #{session_id} terminating")
     end
 
-    Hound.Helpers.Session.change_session_to(session_id)
-    Hound.Helpers.Session.end_session()
+    if !opts[:sandbox?] do
+      Hound.Helpers.Session.change_session_to(session_id)
+      Hound.Helpers.Session.end_session()
+    end
   end
 end
