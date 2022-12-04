@@ -28,7 +28,7 @@ defmodule ScraperEx do
 
   alias ScraperEx.Window
 
-  @spec run_task_in_window(list(task_config), window_opts) :: map
+  @spec run_task_in_window(list(task_config), window_opts) :: ErrorMessage.t_res(map)
   @doc """
   This function allows you to run a task and a window is started for you,
   good for times where you have a short running task to open and close a web page
@@ -40,7 +40,7 @@ defmodule ScraperEx do
       ...>   {:click, {:css, "a"}, :timer.seconds(1)},
       ...>   {:read, :page_title, {:css, "h1"}},
       ...> ])
-      %{page_title: "IANA-managed Reserved Domains"}
+      {:ok, %{page_title: "IANA-managed Reserved Domains"}}
   """
   def run_task_in_window(configs, window_opts \\ []) do
     with {:ok, pid} <- Window.start_link(window_opts) do
@@ -50,7 +50,7 @@ defmodule ScraperEx do
     end
   end
 
-  @spec run_task(list(task_config)) :: map
+  @spec run_task(list(task_config)) :: ErrorMessage.t_res(map)
   @doc """
   This function allows you to run a task within a window you control, good for times
   where you have a long running window you need to run multiple tasks on
@@ -63,7 +63,7 @@ defmodule ScraperEx do
       ...>   {:click, {:css, "a"}, :timer.seconds(1)},
       ...>   {:read, :page_title, {:css, "h1"}},
       ...> ])
-      %{page_title: "IANA-managed Reserved Domains"}
+      {:ok, %{page_title: "IANA-managed Reserved Domains"}}
       iex> Hound.end_session()
   """
   defdelegate run_task(configs), to: ScraperEx.Task, as: :run

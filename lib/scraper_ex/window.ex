@@ -44,6 +44,8 @@ defmodule ScraperEx.Window do
 
     Process.flag(:trap_exit, true)
 
+    Logger.info("Hound window #{session_id} started")
+
     {:ok, session_id, {:continue, start_fn}}
   end
 
