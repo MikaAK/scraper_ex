@@ -21,7 +21,7 @@ defmodule ScraperEx.Sandbox do
   """
   def set_run_task_result(flow_config, result) do
     config_hash = :erlang.phash2(flow_config)
-    res = case SandboxRegistry.register(@registry, config_hash, %{result: result}, @keys) do
+    res = case SandboxRegistry.register(@registry, "#{config_hash}", %{result: result}, @keys) do
       :ok -> :ok
       {:error, :registry_not_started} -> raise_not_started!()
     end
@@ -38,7 +38,7 @@ defmodule ScraperEx.Sandbox do
   def run_task_result(flow_config) do
     config_hash = :erlang.phash2(flow_config)
 
-    case SandboxRegistry.lookup(@registry, config_hash) do
+    case SandboxRegistry.lookup(@registry, "#{config_hash}") do
       {:ok, %{result: result}} -> result
 
       {:error, :pid_not_registered} ->

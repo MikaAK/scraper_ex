@@ -40,7 +40,9 @@ defmodule ScraperEx.Window do
   end
 
   def init(opts) do
-    session_id = if !opts[:sandbox?] do
+    session_id = if opts[:sandbox?] do
+      :not_started_due_to_sandbox
+    else
       id = Hound.Helpers.Session.start_session(user_agent: @supported_ua)
 
       Process.flag(:trap_exit, true)
@@ -48,8 +50,6 @@ defmodule ScraperEx.Window do
       Logger.info("Hound window #{id} started")
 
       id
-    else
-      :not_started_due_to_sandbox
     end
 
     opts = Keyword.put(opts, :session_id, session_id)
@@ -85,7 +85,9 @@ defmodule ScraperEx.Window do
   end
 
   def handle_call(:remake_session, _from, opts) do
-    if not opts[:sandbox?] do
+    if opts[:sandbox?] do
+      {:reply, opts[:session_id], opts}
+    else
       Hound.Helpers.Session.end_session()
 
       Process.sleep(100)
@@ -94,8 +96,6 @@ defmodule ScraperEx.Window do
       Logger.debug("Remaking session #{opts[:session_id]} into #{new_session_id}")
 
       {:reply, new_session_id, Keyword.put(opts, :session_id, new_session_id)}
-    else
-      {:reply, opts[:session_id], opts}
     end
   end
 

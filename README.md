@@ -40,7 +40,7 @@ version won't and you will need to manage your own `ScraperEx.Window`
 
 
 ### Tasks
-Tasks are defined by configs, you can either use the struct form using `ScraperEx.Task.Config` modules or use the short forms
+Tasks (Flows) are defined by configs, you can either use the struct form using `ScraperEx.Task.Config` modules or use the short forms
 
 The following actions are currently implemented:
 - `:navigate_to` or `ScraperEx.Task.Config.Navigate`
@@ -69,7 +69,7 @@ iex> ScraperEx.run_task_in_window([
 ...>   {:click, {:css, "h2:has(#External_links) + ul li:nth-of-type(3) a"}, :timer.seconds(1)},
 ...>   {:read, :clicked_url, {:css, "h1"}},
 ...> ])
-%{ \
+{:ok, %{ \
   page_title: "Example.com", \
   external_link_4: "example.edu", \
   clicked_url: "Example Domain", \
@@ -79,5 +79,17 @@ iex> ScraperEx.run_task_in_window([
     "RFC 2606, Reserved Top Level DNS Names, D. Eastlake, A. Panitz, The Internet Society (June 1999), Section 3.", \
     "RFC 6761, S. Cheshire, M. Krochmal, Special-Use Domain Names, IETF (February 2013)" \
   ] \
-}
+}}
 ```
+
+### Testing
+We can test and mock out specific flow responses by using `ScraperEx.Sandbox`
+
+First we must call `ScraperEx.Sandbox.start_link()` in our `test_helpers.ex` file, then
+Inside our test, we can do
+
+```elixir
+  ScraperEx.Sandbox.set_run_task_result(my_flow(), %{my_result: :ok})
+```
+
+in each test to set the response of a specific flow.
