@@ -76,7 +76,12 @@ defmodule ScraperEx.MixProject do
           ScraperEx.Task.Config.Input,
           ScraperEx.Task.Config.Navigate,
           ScraperEx.Task.Config.Read,
-          ScraperEx.Task.Config.Screenshot
+          ScraperEx.Task.Config.Scroll,
+          ScraperEx.Task.Config.Sleep,
+          ScraperEx.Task.Config.SendKeys,
+          ScraperEx.Task.Config.SendText,
+          ScraperEx.Task.Config.Screenshot,
+          ScraperEx.Task.Config.Javascript
         ]
       ]
     ]
