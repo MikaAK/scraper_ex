@@ -46,7 +46,7 @@ defmodule ScraperEx.MixProject do
       {:telemetry, "~> 1.1"},
       {:telemetry_metrics, "~> 0.6.1"},
 
-      {:sandbox_registry, github: "MikaAK/sandbox_registry"},
+      {:sandbox_registry, "~> 0.1"},
 
       {:ex_doc, ">= 0.0.0", optional: true, only: :dev},
       {:dialyxir, "~> 1.0", optional: true, only: :test, runtime: false},
