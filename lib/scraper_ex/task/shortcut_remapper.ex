@@ -1,4 +1,6 @@
 defmodule ScraperEx.Task.ShortcutRemapper do
+  @moduledoc false
+
   alias ScraperEx.Task.Config
 
   def remap(shortcuts) do
