@@ -1,3 +1,6 @@
+# 0.2.1
+- Bug fixes for using ScraperEx.Window manually
+
 # 0.2.0
 - Add sandbox? mode to allow mocking responses
 
