@@ -1,4 +1,5 @@
 # ScraperEx
+ [![Hex version badge](https://img.shields.io/hexpm/v/scraper_ex.svg)](https://hex.pm/packages/scraper_ex)
 <!-- [![Coverage](https://github.com/MikaAK/scraper_ex/actions/workflows/coverage.yml/badge.svg)](https://github.com/MikaAK/scraper_ex/actions/workflows/coverage.yml) -->
 [![Credo](https://github.com/MikaAK/scraper_ex/actions/workflows/credo.yml/badge.svg)](https://github.com/MikaAK/scraper_ex/actions/workflows/credo.yml)
 [![Dialyzer](https://github.com/MikaAK/scraper_ex/actions/workflows/dialyzer.yml/badge.svg)](https://github.com/MikaAK/scraper_ex/actions/workflows/dialyzer.yml)
