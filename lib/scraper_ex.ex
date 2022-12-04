@@ -4,7 +4,8 @@ defmodule ScraperEx do
 
   @type window_opts :: [
     name: String.t(),
-    start_fn: (() -> any)
+    start_fn: (() -> any),
+    sandbox?: boolean
   ]
 
   @type task_atom_config :: {:navigate_to, url :: String.t} |
@@ -48,10 +49,14 @@ defmodule ScraperEx do
       {:ok, %{page_title: "IANA-managed Reserved Domains"}}
   """
   def run_task_in_window(configs, window_opts \\ []) do
-    with {:ok, pid} <- Window.start_link(window_opts) do
-      pid
-        |> Window.run_in_window(fn _ -> ScraperEx.Task.run(configs) end)
-        |> tap(fn _ -> Window.shutdown(pid) end)
+    if window_opts[:sandbox?] do
+      ScraperEx.Sandbox.run_task_result(configs)
+    else
+      with {:ok, pid} <- Window.start_link(window_opts) do
+        pid
+          |> Window.run_in_window(fn _ -> ScraperEx.Task.run(configs) end)
+          |> tap(fn _ -> Window.shutdown(pid) end)
+      end
     end
   end
 
@@ -71,7 +76,13 @@ defmodule ScraperEx do
       {:ok, %{page_title: "IANA-managed Reserved Domains"}}
       iex> Hound.end_session()
   """
-  defdelegate run_task(configs), to: ScraperEx.Task, as: :run
+  def run_task(configs, opts \\ []) do
+    if opts[:sandbox?] do
+      ScraperEx.Sandbox.run_task_result(configs)
+    else
+      ScraperEx.Task.run(configs)
+    end
+  end
 
   @spec allow_error(task_config) :: {:allow_error, task_atom_config | task_module_config}
   def allow_error(config) do

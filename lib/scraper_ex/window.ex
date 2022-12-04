@@ -36,26 +36,34 @@ defmodule ScraperEx.Window do
   def start_link(opts \\ []) do
     opts = Keyword.update(opts, :name, nil, &server_name/1)
 
-    GenServer.start_link(Window, opts[:start_fn], opts)
+    GenServer.start_link(Window, opts, opts)
   end
 
-  def init(start_fn) do
-    session_id = Hound.Helpers.Session.start_session(user_agent: @supported_ua)
+  def init(opts) do
+    session_id = if !opts[:sandbox?] do
+      id = Hound.Helpers.Session.start_session(user_agent: @supported_ua)
 
-    Process.flag(:trap_exit, true)
+      Process.flag(:trap_exit, true)
 
-    Logger.info("Hound window #{session_id} started")
+      Logger.info("Hound window #{id} started")
 
-    {:ok, session_id, {:continue, start_fn}}
+      id
+    else
+      :not_started_due_to_sandbox
+    end
+
+    opts = Keyword.put(opts, :session_id, session_id)
+
+    {:ok, opts, {:continue, opts[:start_fn]}}
   end
 
-  def handle_continue(start_fn, session_id) do
+  def handle_continue(start_fn, opts) do
     if not is_nil(start_fn) do
-      Logger.debug("Executing start_fn with session #{session_id}")
+      Logger.debug("Executing start_fn with session #{opts[:session_id]}")
       start_fn.()
     end
 
-    {:noreply, session_id}
+    {:noreply, opts}
   end
 
   defp server_name(name), do: :"#{name}_scraper_ex"
@@ -76,22 +84,28 @@ defmodule ScraperEx.Window do
     GenServer.call(server_name(name), {:run_in_window, function}, :timer.hours(2))
   end
 
-  def handle_call(:remake_session, _from, session_id) do
-    Hound.Helpers.Session.end_session()
+  def handle_call(:remake_session, _from, opts) do
+    if not opts[:sandbox?] do
+      Hound.Helpers.Session.end_session()
 
-    Process.sleep(100)
-    new_session_id = Hound.Helpers.Session.start_session()
-    Process.sleep(100)
-    Logger.debug("Remaking session #{session_id} into #{new_session_id}")
+      Process.sleep(100)
+      new_session_id = Hound.Helpers.Session.start_session()
+      Process.sleep(100)
+      Logger.debug("Remaking session #{opts[:session_id]} into #{new_session_id}")
 
-    {:reply, new_session_id, new_session_id}
+      {:reply, new_session_id, Keyword.put(opts, :session_id, new_session_id)}
+    else
+      {:reply, opts[:session_id], opts}
+    end
   end
 
-  def handle_call({:run_in_window, function}, _from, session_id) do
-    {:reply, function.(session_id), session_id}
+  def handle_call({:run_in_window, function}, _from, opts) do
+    {:reply, function.(opts[:session_id]), opts}
   end
 
-  def terminate(reason, session_id) do
+  def terminate(reason, opts) do
+    session_id = opts[:session_id]
+
     if reason !== :normal do
       Logger.error("Hound window #{session_id} terminating because of #{inspect reason, pretty: true}")
     else
