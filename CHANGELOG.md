@@ -1,3 +1,6 @@
+# 0.2.2
+- Bug fixes for specs
+
 # 0.2.1
 - Bug fixes for using ScraperEx.Window manually
 
