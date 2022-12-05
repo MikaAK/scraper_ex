@@ -8,6 +8,10 @@ defmodule ScraperEx do
     sandbox?: boolean
   ]
 
+  @type task_opts :: [
+    sandbox?: boolean
+  ]
+
   @type task_atom_config :: {:navigate_to, url :: String.t} |
                             {:navigate_to, url :: String.t, load_time :: pos_integer} |
                             {:input, Hound.Element.selector} |
@@ -61,6 +65,7 @@ defmodule ScraperEx do
   end
 
   @spec run_task(list(task_config)) :: ErrorMessage.t_res(map)
+  @spec run_task(list(task_config), task_opts) :: ErrorMessage.t_res(map)
   @doc """
   This function allows you to run a task within a window you control, good for times
   where you have a long running window you need to run multiple tasks on
