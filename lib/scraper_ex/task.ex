@@ -93,11 +93,12 @@ defmodule ScraperEx.Task do
 
   defp run_config(%Config.Read{selector: {strategy, selector}, key: key, html?: html?}) do
     try do
-      Logger.debug("[ScraperEx.Task] Reading from selector into #{key}")
+      Logger.debug("[ScraperEx.Task] Reading from selector into #{key}, returning html?: #{html?}")
 
       case Hound.Helpers.Page.find_all_elements(strategy, selector) do
         [] -> {:ok, {key, nil}}
-        [element] when html? -> {:ok, {key, element}}
+        [element] when html? -> {:ok, {key, element_html(element)}}
+        elements when html? -> {:ok, {key, Enum.map(elements, &element_html/1)}}
         [element] -> {:ok, {key, element_inner_text(element)}}
         elements -> {:ok, {key, Enum.map(elements, &element_inner_text/1)}}
       end
@@ -148,6 +149,12 @@ defmodule ScraperEx.Task do
   defp element_inner_text(element) do
     element
       |> Hound.Helpers.Element.inner_text
+      |> String.normalize(:nfkc)
+  end
+
+  defp element_html(element) do
+    element
+      |> Hound.Helpers.Element.outer_html
       |> String.normalize(:nfkc)
   end
 end
