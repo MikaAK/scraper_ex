@@ -22,6 +22,8 @@ defmodule ScraperEx do
                             {:scroll, x :: pos_integer} |
                             {:scroll, x :: pos_integer, y :: pos_integer} |
                             {:sleep, period :: pos_integer} |
+                            {:read, text :: String.t, Hound.Element.selector} |
+                            {:read, text :: String.t, Hound.Element.selector, html?: boolean} |
                             {:send_text, text :: String.t} |
                             {:send_keys, keys :: list(atom) | atom} |
                             {:javascript, script :: String.t} |

@@ -1,3 +1,6 @@
+# 0.2.3
+- Add html? to read options
+
 # 0.2.2
 - Bug fixes for specs
 

@@ -4,7 +4,7 @@ defmodule ScraperEx.MixProject do
   def project do
     [
       app: :scraper_ex,
-      version: "0.2.2",
+      version: "0.2.3",
       elixir: "~> 1.10",
       description: "Scraping with hound made a bit easier and quicker to use for writing applications",
       start_permanent: Mix.env() == :prod,
