@@ -70,7 +70,7 @@ iex> ScraperEx.run_task_in_window([
 ...>   {:read, :clicked_url, {:css, "h1"}},
 ...> ])
 {:ok, %{ \
-  page_title: "Example.com", \
+  page_title: "example.com", \
   external_link_4: "example.edu", \
   clicked_url: "Example Domain", \
   references: [ \

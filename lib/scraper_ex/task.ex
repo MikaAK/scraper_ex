@@ -91,12 +91,13 @@ defmodule ScraperEx.Task do
     end
   end
 
-  defp run_config(%Config.Read{selector: {strategy, selector}, key: key}) do
+  defp run_config(%Config.Read{selector: {strategy, selector}, key: key, html?: html?}) do
     try do
       Logger.debug("[ScraperEx.Task] Reading from selector into #{key}")
 
       case Hound.Helpers.Page.find_all_elements(strategy, selector) do
         [] -> {:ok, {key, nil}}
+        [element] when html? -> {:ok, {key, element}}
         [element] -> {:ok, {key, element_inner_text(element)}}
         elements -> {:ok, {key, Enum.map(elements, &element_inner_text/1)}}
       end

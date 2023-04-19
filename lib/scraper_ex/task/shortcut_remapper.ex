@@ -47,6 +47,10 @@ defmodule ScraperEx.Task.ShortcutRemapper do
     %Config.Scroll{selector: selector, x_offset: x, y_offset: y}
   end
 
+  defp maybe_short_to_config({:read, key, selector, html?: html?}) do
+    %Config.Read{key: key, selector: selector, html?: html?}
+  end
+
   defp maybe_short_to_config({:read, key, selector}) do
     %Config.Read{key: key, selector: selector}
   end

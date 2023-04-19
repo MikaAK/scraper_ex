@@ -59,10 +59,10 @@ defmodule ScraperEx.Task.Config do
     Reads a value from the page and stores it under a key, this key will be used to build
     a map with all the read values
     """
-    @type t :: %__MODULE__{selector: Hound.Element.selector, key: String.t | atom}
+    @type t :: %__MODULE__{selector: Hound.Element.selector, key: String.t | atom, html?: boolean}
 
     @enforce_keys [:selector, :key]
-    defstruct [:value | @enforce_keys]
+    defstruct [:value | @enforce_keys] ++ [html?: false]
   end
 
   defmodule Javascript do
